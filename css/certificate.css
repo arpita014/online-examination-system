@@ -1,0 +1,309 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f1f3f6;
+    min-height: 100vh;
+}
+
+.page {
+    width: 100%;
+    padding: 40px 20px;
+}
+
+/* Certificate */
+
+.certificate {
+    max-width: 1000px;
+    min-height: 700px;
+    margin: auto;
+
+    background: #ffffff;
+
+    border: 12px solid #1d3557;
+    outline: 3px solid #d4af37;
+    outline-offset: -25px;
+
+    padding: 65px 70px;
+
+    position: relative;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Decorative corners */
+
+.certificate::before,
+.certificate::after {
+    content: "✦";
+    position: absolute;
+    color: #d4af37;
+    font-size: 38px;
+}
+
+.certificate::before {
+    top: 30px;
+    left: 40px;
+}
+
+.certificate::after {
+    bottom: 30px;
+    right: 40px;
+}
+
+/* Top */
+
+.top-decoration {
+    text-align: center;
+    color: #d4af37;
+    font-size: 22px;
+    letter-spacing: 15px;
+    margin-bottom: 15px;
+}
+
+.certificate-header {
+    text-align: center;
+}
+
+.logo {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+.certificate-header h1 {
+    font-size: 48px;
+    letter-spacing: 8px;
+    color: #1d3557;
+}
+
+.certificate-header h2 {
+    font-size: 22px;
+    letter-spacing: 5px;
+    color: #d4af37;
+    margin-top: 5px;
+}
+
+.line {
+    width: 180px;
+    height: 3px;
+    background: #d4af37;
+    margin: 18px auto;
+}
+
+.certify-text {
+    font-size: 18px;
+    color: #555;
+}
+
+/* Student */
+
+.student-section {
+    text-align: center;
+    margin-top: 22px;
+}
+
+.student-section h3 {
+    font-size: 38px;
+    color: #1d3557;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.student-section p {
+    font-size: 18px;
+    color: #555;
+}
+
+.student-section h2 {
+    margin-top: 12px;
+    font-size: 28px;
+    color: #222;
+}
+
+/* Details */
+
+.details {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 35px;
+}
+
+.detail-box {
+    text-align: center;
+    min-width: 130px;
+}
+
+.detail-box span {
+    display: block;
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.detail-box strong {
+    font-size: 21px;
+    color: #1d3557;
+}
+
+/* Certificate ID */
+
+.certificate-id {
+    text-align: center;
+    margin-top: 28px;
+}
+
+.certificate-id span {
+    font-size: 13px;
+    color: #777;
+}
+
+.certificate-id strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: #333;
+}
+
+/* Footer */
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    margin-top: 45px;
+}
+
+.signature {
+    text-align: center;
+    width: 180px;
+}
+
+.signature-line {
+    border-top: 1px solid #333;
+    margin-bottom: 7px;
+}
+
+.signature p {
+    font-size: 12px;
+    color: #555;
+}
+
+.organization {
+    text-align: center;
+}
+
+.organization strong {
+    color: #1d3557;
+    font-size: 15px;
+}
+
+.organization p {
+    font-size: 12px;
+    color: #777;
+    margin-top: 4px;
+}
+
+/* Buttons */
+
+.buttons {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.buttons button {
+    border: none;
+    padding: 12px 25px;
+    margin: 5px;
+
+    border-radius: 7px;
+
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.print-btn {
+    background: #1d3557;
+    color: white;
+}
+
+.dashboard-btn {
+    background: #d4af37;
+    color: #222;
+}
+
+.buttons button:hover {
+    opacity: 0.85;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .page {
+        padding: 15px;
+    }
+
+    .certificate {
+        padding: 45px 25px;
+        min-height: auto;
+    }
+
+    .certificate-header h1 {
+        font-size: 32px;
+        letter-spacing: 4px;
+    }
+
+    .certificate-header h2 {
+        font-size: 17px;
+    }
+
+    .student-section h3 {
+        font-size: 27px;
+    }
+
+    .student-section h2 {
+        font-size: 22px;
+    }
+
+    .details {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+}
+
+/* Print */
+
+@media print {
+
+    body {
+        background: white;
+    }
+
+    .page {
+        padding: 0;
+    }
+
+    .certificate {
+        box-shadow: none;
+        width: 100%;
+        max-width: none;
+        min-height: 100vh;
+    }
+
+    .buttons {
+        display: none;
+    }
+}

@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add 100 Sample Students</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f5f9;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px #00000015;
+    }
+
+    h2 {
+      color: #253b80;
+    }
+
+    button {
+      background: #253b80;
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+
+    button:disabled {
+      background: #888;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Add 100 Sample Students</h2>
+
+    <p>
+      This page adds 100 sample student profiles
+      to your Firestore users collection.
+    </p>
+
+    <button id="addBtn" disabled>
+      Checking Login...
+    </button>
+
+    <div id="status">Checking Firebase connection...</div>
+  </div>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // STEP 1: Use your EXISTING Firebase configuration.
+    const firebaseConfig = {
+      apiKey: "AIzaSyDe5o4C6FFWc_O8LcUao61xHHnlruKtIZc",
+      authDomain: "online-examination-syste-21adf.firebaseapp.com",
+      projectId: "online-examination-syste-21adf",
+      storageBucket: "online-examination-syste-21adf.firebasestorage.app",
+      messagingSenderId: "271890466949",
+      appId: "1:271890466949:web:13ff78e6523d28ad7ac1ec",
+      measurementId: "G-BSMQ1MB3J0"
+    };
+
+    // STEP 2: Initialize Firebase.
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const addBtn = document.getElementById("addBtn");
+    const statusBox = document.getElementById("status");
+
+    let loggedInUser = null;
+
+    // STEP 3: Check whether the admin/user is logged in.
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        loggedInUser = user;
+        addBtn.disabled = false;
+        addBtn.textContent = "Add 100 Sample Students";
+
+        statusBox.textContent =
+          "Firebase connected.\n" +
+          "Logged in as: " + (user.email || user.uid) +
+          "\nClick the button to add sample profiles.";
+      } else {
+        loggedInUser = null;
+        addBtn.disabled = true;
+        addBtn.textContent = "Login Required";
+
+        statusBox.textContent =
+          "Please login through your existing project first.\n" +
+          "Then open this page in the same browser session.";
+      }
+    });
+
+    // STEP 4: Sample names for generating profiles.
+    const firstNames = [
+      "Aarav", "Vivaan", "Aditya", "Arjun", "Ishaan",
+      "Rahul", "Rohan", "Om", "Atharv", "Siddharth",
+      "Sakshi", "Ananya", "Priya", "Sneha", "Pooja",
+      "Neha", "Aditi", "Riya", "Kavya", "Anjali"
+    ];
+
+    const lastNames = [
+      "Patil", "Sharma", "Kumar", "Shinde", "Jadhav",
+      "Deshmukh", "Pawar", "Kulkarni", "Joshi", "More"
+    ];
+
+    const courses = [
+      "M.Sc. Computer Science",
+      "B.Sc. Computer Science",
+      "BCA",
+      "MCA",
+      "B.Tech Computer Science"
+    ];
+
+    // STEP 5: Add profiles in a single Firestore batch.
+    addBtn.addEventListener("click", async function() {
+      if (!loggedInUser) {
+        statusBox.textContent = "Please login first.";
+        return;
+      }
+
+      const confirmed = confirm(
+        "Add 100 sample student profiles to Firestore?"
+      );
+
+      if (!confirmed) return;
+
+      addBtn.disabled = true;
+      statusBox.textContent = "Adding 100 student profiles...";
+
+      try {
+        const batch = db.batch();
+
+        for (let i = 1; i <= 100; i++) {
+          const number = String(i).padStart(3, "0");
+
+          const firstName =
+            firstNames[(i - 1) % firstNames.length];
+
+          const lastName =
+            lastNames[Math.floor((i - 1) / 10) % lastNames.length];
+
+          const fullName = firstName + " " + lastName;
+
+          // Unique sample document ID.
+          const documentId = "sample_student_" + number;
+
+          const userRef = db.collection("users").doc(documentId);
+
+          const studentData = {
+            userId: documentId,
+            fullName: fullName,
+            email: "student" + number + "@example.com",
+            course: courses[(i - 1) % courses.length],
+            role: "student",
+            isSample: true,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+
+          batch.set(userRef, studentData, { merge: true });
+        }
+
+        await batch.commit();
+
+        statusBox.textContent =
+          "SUCCESS! 100 sample profiles added.\n\n" +
+          "Collection: users\n" +
+          "Document IDs: sample_student_001 to sample_student_100\n\n" +
+          "Open Firebase Console → Firestore Database → Data → users.";
+
+      } catch (error) {
+        console.error("Error adding sample users:", error);
+
+        statusBox.textContent =
+          "Could not add sample users.\n\n" +
+          "Error: " + error.message + "\n\n" +
+          "Check your Firebase configuration, login status, " +
+          "Firestore rules, and browser console.";
+      } finally {
+        addBtn.disabled = !loggedInUser;
+      }
+    });
+  </script>
+</body>
+</html>

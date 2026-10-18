@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Part 2 Exams - Online Examination System</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-card {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.10);
+        }
+
+        h1 {
+            text-align: center;
+            color: #212529;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        .exam-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .exam-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .exam-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            white-space: pre-line;
+        }
+
+        .success-box {
+            background: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+
+        .error-box {
+            background: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+
+        .info-box {
+            background: #cff4fc;
+            color: #055160;
+            border: 1px solid #b6effb;
+        }
+
+        #addExamsBtn {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .login-status {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="main-card">
+
+            <h1>📚 Add Part 2 Exams</h1>
+
+            <p class="subtitle">
+                Online Examination System
+            </p>
+
+            <!-- LOGIN STATUS -->
+            <div id="loginStatus" class="login-status text-warning">
+                Checking Firebase login...
+            </div>
+
+            <!-- EXAM LIST -->
+            <div class="exam-list">
+
+                <div class="exam-item">
+                    <strong>1. Software Testing</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+                <div class="exam-item">
+                    <strong>2. Data Science</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+                <div class="exam-item">
+                    <strong>3. Computer Organization & Architecture</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+                <div class="exam-item">
+                    <strong>4. Computer Graphics</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+                <div class="exam-item">
+                    <strong>5. Web Development</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+                <div class="exam-item">
+                    <strong>6. DevOps</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+                <div class="exam-item">
+                    <strong>7. Big Data</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+                <div class="exam-item">
+                    <strong>8. Natural Language Processing</strong>
+                    <span class="text-muted"> - 10 Questions</span>
+                </div>
+
+            </div>
+
+            <!-- ADD BUTTON -->
+            <button id="addExamsBtn" class="btn btn-primary" disabled>
+                Checking Login...
+            </button>
+
+            <!-- STATUS -->
+            <div id="statusBox" class="status-box"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- FIREBASE COMPAT SDK -->
+    <!-- ========================================================= -->
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+
+    <script>
+
+        // =========================================================
+        // FIREBASE CONFIG
+        // =========================================================
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyDe5o4C6FFWc_O8LcUao61xHHnlruKtIZc",
+
+            authDomain:
+                "online-examination-syste-21adf.firebaseapp.com",
+
+            projectId:
+                "online-examination-syste-21adf",
+
+            storageBucket:
+                "online-examination-syste-21adf.firebasestorage.app",
+
+            messagingSenderId:
+                "271890466949",
+
+            appId:
+                "1:271890466949:web:13ff78e6523d28ad7ac1ec",
+
+            measurementId:
+                "G-BSMQ1MB3J0"
+        };
+
+
+        // =========================================================
+        // INITIALIZE FIREBASE
+        // =========================================================
+
+        try {
+
+            if (!firebase.apps.length) {
+
+                firebase.initializeApp(firebaseConfig);
+
+            }
+
+            console.log("Firebase initialized successfully.");
+
+        } catch (error) {
+
+            console.error("Firebase initialization error:", error);
+
+            document.getElementById("loginStatus").innerText =
+                "❌ Firebase initialization failed.";
+
+        }
+
+
+        // =========================================================
+        // FIRESTORE
+        // =========================================================
+
+        const db = firebase.firestore();
+
+
+        // =========================================================
+        // VARIABLES
+        // =========================================================
+
+        let currentUser = null;
+
+        const addButton =
+            document.getElementById("addExamsBtn");
+
+        const loginStatus =
+            document.getElementById("loginStatus");
+
+        const statusBox =
+            document.getElementById("statusBox");
+
+
+        // =========================================================
+        // SHOW STATUS
+        // =========================================================
+
+        function showStatus(message, type) {
+
+            statusBox.style.display = "block";
+
+            statusBox.innerText = message;
+
+            statusBox.className = "status-box";
+
+            if (type === "success") {
+
+                statusBox.classList.add("success-box");
+
+            } else if (type === "error") {
+
+                statusBox.classList.add("error-box");
+
+            } else {
+
+                statusBox.classList.add("info-box");
+
+            }
+        }
+
+
+        // =========================================================
+        // AUTH STATE
+        // =========================================================
+
+        firebase.auth().onAuthStateChanged(function (user) {
+
+            console.log("Auth state changed:", user);
+
+            if (user) {
+
+                currentUser = user;
+
+                loginStatus.innerText =
+                    "✅ Logged in: " + user.email;
+
+                loginStatus.className =
+                    "login-status text-success";
+
+                addButton.disabled = false;
+
+                addButton.innerText =
+                    "🚀 Add Part 2 Exams to Firebase";
+
+                showStatus(
+                    "You are logged in. You can now add Part 2 exams.",
+                    "info"
+                );
+
+            } else {
+
+                currentUser = null;
+
+                loginStatus.innerText =
+                    "❌ No user logged in. Please login first.";
+
+                loginStatus.className =
+                    "login-status text-danger";
+
+                addButton.disabled = true;
+
+                addButton.innerText =
+                    "Login Required";
+
+                showStatus(
+                    "Please login to your Online Examination System first, then open this page again.",
+                    "error"
+                );
+            }
+
+        });
+
+
+        // =========================================================
+        // PART 2 QUESTIONS
+        // =========================================================
+
+
+        // ---------------------------------------------------------
+        // 1. SOFTWARE TESTING
+        // ---------------------------------------------------------
+
+        const softwareTestingQuestions = [
+
+            {
+                question: "What is software testing?",
+                optionA: "Process of finding defects and verifying requirements",
+                optionB: "Process of writing only code",
+                optionC: "Process of designing hardware",
+                optionD: "Process of installing Windows",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Which testing checks the smallest unit of software?",
+                optionA: "System Testing",
+                optionB: "Unit Testing",
+                optionC: "Acceptance Testing",
+                optionD: "Regression Testing",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Integration testing mainly checks:",
+                optionA: "Individual variables",
+                optionB: "Combined modules",
+                optionC: "Computer hardware",
+                optionD: "Network cables",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "System testing tests:",
+                optionA: "Only one function",
+                optionB: "Only database",
+                optionC: "Complete software system",
+                optionD: "Only UI colors",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Who commonly performs User Acceptance Testing?",
+                optionA: "Compiler",
+                optionB: "Database",
+                optionC: "Operating system",
+                optionD: "Customer or end user",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Regression testing is performed to check:",
+                optionA: "Whether changes broke existing functionality",
+                optionB: "Only database size",
+                optionC: "Computer speed",
+                optionD: "Internet speed",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Black-box testing mainly focuses on:",
+                optionA: "Internal source code",
+                optionB: "Inputs and outputs",
+                optionC: "CPU architecture",
+                optionD: "Memory chips",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "White-box testing requires knowledge of:",
+                optionA: "User interface only",
+                optionB: "Business advertisements",
+                optionC: "Internal code structure",
+                optionD: "Internet connection",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Smoke testing is generally used to:",
+                optionA: "Check basic build functionality",
+                optionB: "Delete software",
+                optionC: "Create database tables",
+                optionD: "Design graphics",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "A software defect means:",
+                optionA: "A new feature",
+                optionB: "A database",
+                optionC: "A programming language",
+                optionD: "Deviation from expected behavior",
+                correctAnswer: "D",
+                marks: 1
+            }
+
+        ];
+
+
+        // ---------------------------------------------------------
+        // 2. DATA SCIENCE
+        // ---------------------------------------------------------
+
+        const dataScienceQuestions = [
+
+            {
+                question: "Data Science mainly combines:",
+                optionA: "Statistics, programming and domain knowledge",
+                optionB: "Only HTML",
+                optionC: "Only hardware",
+                optionD: "Only networking",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Which type of data is commonly stored in tables?",
+                optionA: "Audio data",
+                optionB: "Structured data",
+                optionC: "Video data",
+                optionD: "Image data",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Which Python library is widely used for data manipulation?",
+                optionA: "Django",
+                optionB: "Flask",
+                optionC: "Pandas",
+                optionD: "Tkinter",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "NumPy is mainly used for:",
+                optionA: "Numerical computing",
+                optionB: "Web hosting",
+                optionC: "Database administration",
+                optionD: "Video editing",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Data cleaning is used to:",
+                optionA: "Create websites",
+                optionB: "Install software",
+                optionC: "Design logos",
+                optionD: "Handle errors and inconsistent data",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "EDA stands for:",
+                optionA: "Electronic Data Application",
+                optionB: "Exploratory Data Analysis",
+                optionC: "External Database Access",
+                optionD: "Enterprise Data Architecture",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Which library is commonly used for data visualization in Python?",
+                optionA: "OS",
+                optionB: "Sys",
+                optionC: "Matplotlib",
+                optionD: "Random",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Mean is calculated as:",
+                optionA: "Sum of values divided by number of values",
+                optionB: "Largest value only",
+                optionC: "Smallest value only",
+                optionD: "Number of columns",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Why is data divided into training and testing sets?",
+                optionA: "To delete data",
+                optionB: "To increase file size",
+                optionC: "To create passwords",
+                optionD: "To evaluate model performance",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "A data scientist mainly works with data to:",
+                optionA: "Repair computers",
+                optionB: "Generate insights and support decisions",
+                optionC: "Install operating systems",
+                optionD: "Design keyboards",
+                correctAnswer: "B",
+                marks: 1
+            }
+
+        ];
+
+
+        // ---------------------------------------------------------
+        // 3. COA
+        // ---------------------------------------------------------
+
+        const coaQuestions = [
+
+            {
+                question: "CPU stands for:",
+                optionA: "Central Processing Unit",
+                optionB: "Computer Processing Utility",
+                optionC: "Central Program Unit",
+                optionD: "Computer Primary Unit",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Which CPU component performs arithmetic and logical operations?",
+                optionA: "RAM",
+                optionB: "ALU",
+                optionC: "Cache",
+                optionD: "Hard Disk",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "The Control Unit is responsible for:",
+                optionA: "Storing files",
+                optionB: "Printing documents",
+                optionC: "Directing CPU operations",
+                optionD: "Displaying images",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "RAM is:",
+                optionA: "Permanent memory",
+                optionB: "External memory",
+                optionC: "Read-only memory",
+                optionD: "Volatile memory",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Which memory is generally faster than main memory?",
+                optionA: "Cache",
+                optionB: "Hard disk",
+                optionC: "DVD",
+                optionD: "Pen drive",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Binary number system uses:",
+                optionA: "1 to 9",
+                optionB: "0 and 1",
+                optionC: "A to F",
+                optionD: "Only 2 to 8",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Which is a small high-speed storage location inside CPU?",
+                optionA: "Hard disk",
+                optionB: "RAM",
+                optionC: "Register",
+                optionD: "DVD",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "The basic instruction cycle contains:",
+                optionA: "Run, stop, save",
+                optionB: "Input, output, print",
+                optionC: "Read, write, delete",
+                optionD: "Fetch, decode, execute",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "CPU clock speed is commonly measured in:",
+                optionA: "Hertz",
+                optionB: "Bytes",
+                optionC: "Meters",
+                optionD: "Liters",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Which is an example of non-volatile secondary storage?",
+                optionA: "Register",
+                optionB: "Cache",
+                optionC: "SSD",
+                optionD: "CPU",
+                correctAnswer: "C",
+                marks: 1
+            }
+
+        ];
+
+
+        // ---------------------------------------------------------
+        // 4. COMPUTER GRAPHICS
+        // ---------------------------------------------------------
+
+        const computerGraphicsQuestions = [
+
+            {
+                question: "The smallest element of a digital image is called:",
+                optionA: "Pixel",
+                optionB: "Vector",
+                optionC: "Frame",
+                optionD: "Layer",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Raster graphics are made up of:",
+                optionA: "Equations",
+                optionB: "Pixels",
+                optionC: "Only lines",
+                optionD: "Only curves",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Vector graphics are based mainly on:",
+                optionA: "Pixels",
+                optionB: "Sound",
+                optionC: "Geometric shapes",
+                optionD: "Audio signals",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "RGB stands for:",
+                optionA: "Red Green Black",
+                optionB: "Red Gray Blue",
+                optionC: "Right Green Blue",
+                optionD: "Red Green Blue",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Image resolution refers to:",
+                optionA: "Number of pixels",
+                optionB: "Number of files",
+                optionC: "Number of users",
+                optionD: "Internet speed",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Which transformation moves an object from one position to another?",
+                optionA: "Scaling",
+                optionB: "Translation",
+                optionC: "Rotation",
+                optionD: "Clipping",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Which transformation turns an object around a point?",
+                optionA: "Translation",
+                optionB: "Scaling",
+                optionC: "Rotation",
+                optionD: "Reflection",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Clipping is used to:",
+                optionA: "Increase RAM",
+                optionB: "Change colors",
+                optionC: "Create databases",
+                optionD: "Remove parts outside the viewing region",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Which is a popular graphics API?",
+                optionA: "OpenGL",
+                optionB: "MySQL",
+                optionC: "Firebase",
+                optionD: "MongoDB",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Anti-aliasing is used to:",
+                optionA: "Increase file size",
+                optionB: "Smooth jagged edges",
+                optionC: "Delete pixels",
+                optionD: "Create databases",
+                correctAnswer: "B",
+                marks: 1
+            }
+
+        ];
+
+
+        // ---------------------------------------------------------
+        // 5. WEB DEVELOPMENT
+        // ---------------------------------------------------------
+
+        const webDevelopmentQuestions = [
+
+            {
+                question: "Front-end development mainly runs in:",
+                optionA: "Web browser",
+                optionB: "Database server only",
+                optionC: "Printer",
+                optionD: "BIOS",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "HTML is mainly used for:",
+                optionA: "Database management",
+                optionB: "Structuring web pages",
+                optionC: "Operating systems",
+                optionD: "Network routing",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "CSS is mainly used for:",
+                optionA: "Database queries",
+                optionB: "Server installation",
+                optionC: "Styling web pages",
+                optionD: "Writing operating systems",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "JavaScript is mainly used to add:",
+                optionA: "Database tables",
+                optionB: "Hardware drivers",
+                optionC: "Operating system files",
+                optionD: "Interactivity and behavior",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "HTTP stands for:",
+                optionA: "HyperText Transfer Protocol",
+                optionB: "High Transfer Text Program",
+                optionC: "Hyperlink Transfer Process",
+                optionD: "Home Text Transfer Protocol",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Which HTTP method is commonly used to request data?",
+                optionA: "SEND",
+                optionB: "GET",
+                optionC: "PUSH",
+                optionD: "FETCHDATA",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Which HTTP method is commonly used to submit data?",
+                optionA: "GET",
+                optionB: "READ",
+                optionC: "POST",
+                optionD: "OPEN",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "REST is commonly used for:",
+                optionA: "Computer graphics",
+                optionB: "Memory management",
+                optionC: "Image editing",
+                optionD: "Web APIs",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Responsive web design means:",
+                optionA: "Adapting layout to different screen sizes",
+                optionB: "Using only desktop computers",
+                optionC: "Removing CSS",
+                optionD: "Using only mobile phones",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "JSON is commonly used for:",
+                optionA: "Image compression",
+                optionB: "Data interchange",
+                optionC: "Video editing",
+                optionD: "CPU processing",
+                correctAnswer: "B",
+                marks: 1
+            }
+
+        ];
+
+
+        // ---------------------------------------------------------
+        // 6. DEVOPS
+        // ---------------------------------------------------------
+
+        const devopsQuestions = [
+
+            {
+                question: "DevOps combines:",
+                optionA: "Development and Operations",
+                optionB: "Design and Printing",
+                optionC: "Database and Hardware",
+                optionD: "Testing and Graphics only",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "CI stands for:",
+                optionA: "Computer Integration",
+                optionB: "Continuous Integration",
+                optionC: "Code Installation",
+                optionD: "Cloud Interface",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "CD in DevOps commonly refers to:",
+                optionA: "Code Design",
+                optionB: "Computer Database",
+                optionC: "Continuous Delivery/Deployment",
+                optionD: "Cloud Database",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Which tool is commonly used for version control?",
+                optionA: "Docker",
+                optionB: "Kubernetes",
+                optionC: "Jenkins",
+                optionD: "Git",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Docker is mainly used for:",
+                optionA: "Containerization",
+                optionB: "Spreadsheet editing",
+                optionC: "Graphic design",
+                optionD: "Word processing",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Kubernetes is mainly used for:",
+                optionA: "Writing HTML",
+                optionB: "Container orchestration",
+                optionC: "Image editing",
+                optionD: "Database normalization",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Jenkins is commonly used for:",
+                optionA: "Photo editing",
+                optionB: "Database design",
+                optionC: "CI/CD automation",
+                optionD: "Video streaming",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Terraform is commonly associated with:",
+                optionA: "Graphic design",
+                optionB: "Web styling",
+                optionC: "Testing UI",
+                optionD: "Infrastructure as Code",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Monitoring in DevOps is used to:",
+                optionA: "Observe system performance and health",
+                optionB: "Create HTML pages",
+                optionC: "Edit images",
+                optionD: "Write essays",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Automation in DevOps helps improve:",
+                optionA: "Manual work",
+                optionB: "Repeatability and efficiency",
+                optionC: "Screen brightness",
+                optionD: "Keyboard speed",
+                correctAnswer: "B",
+                marks: 1
+            }
+
+        ];
+
+
+        // ---------------------------------------------------------
+        // 7. BIG DATA
+        // ---------------------------------------------------------
+
+        const bigDataQuestions = [
+
+            {
+                question: "Big Data generally refers to:",
+                optionA: "Large, complex and rapidly generated data",
+                optionB: "Only small files",
+                optionC: "Only images",
+                optionD: "Only Excel files",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "The traditional 3Vs of Big Data are:",
+                optionA: "Value, View, Version",
+                optionB: "Volume, Velocity, Variety",
+                optionC: "Visual, Virtual, Variable",
+                optionD: "Value, Volume, View",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Hadoop is mainly used for:",
+                optionA: "Photo editing",
+                optionB: "Web design",
+                optionC: "Distributed storage and processing",
+                optionD: "Email writing",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "HDFS stands for:",
+                optionA: "High Data File System",
+                optionB: "Hybrid Data File Service",
+                optionC: "High Distributed File Service",
+                optionD: "Hadoop Distributed File System",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "MapReduce is mainly a:",
+                optionA: "Distributed data processing model",
+                optionB: "Web browser",
+                optionC: "Database language",
+                optionD: "Graphic tool",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Apache Spark is known for:",
+                optionA: "Only HTML development",
+                optionB: "Fast cluster computing",
+                optionC: "Word processing",
+                optionD: "Operating system design",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "NoSQL databases are often useful for:",
+                optionA: "Only fixed spreadsheets",
+                optionB: "Only small text files",
+                optionC: "Large-scale flexible data",
+                optionD: "Printer management",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Apache Kafka is commonly used for:",
+                optionA: "Image processing",
+                optionB: "CSS styling",
+                optionC: "Database normalization",
+                optionD: "Event streaming",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "A data lake generally stores:",
+                optionA: "Raw data in different formats",
+                optionB: "Only SQL tables",
+                optionC: "Only images",
+                optionD: "Only passwords",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Scalability means the ability to:",
+                optionA: "Delete data",
+                optionB: "Handle increasing workload or data",
+                optionC: "Reduce storage to zero",
+                optionD: "Remove servers",
+                correctAnswer: "B",
+                marks: 1
+            }
+
+        ];
+
+
+        // ---------------------------------------------------------
+        // 8. NLP
+        // ---------------------------------------------------------
+
+        const nlpQuestions = [
+
+            {
+                question: "NLP stands for:",
+                optionA: "Natural Language Processing",
+                optionB: "Network Language Program",
+                optionC: "Natural Logic Processing",
+                optionD: "New Language Protocol",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Tokenization means:",
+                optionA: "Encrypting text",
+                optionB: "Splitting text into smaller tokens",
+                optionC: "Deleting text",
+                optionD: "Translating images",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Stemming generally:",
+                optionA: "Translates a sentence",
+                optionB: "Detects emotions",
+                optionC: "Reduces words to a root/stem form",
+                optionD: "Creates images",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Lemmatization uses:",
+                optionA: "Only random rules",
+                optionB: "Only numbers",
+                optionC: "Only punctuation",
+                optionD: "Linguistic knowledge to obtain a base form",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Sentiment analysis is used to identify:",
+                optionA: "Opinion or emotional tone",
+                optionB: "CPU speed",
+                optionC: "File size",
+                optionD: "Screen resolution",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Named Entity Recognition identifies:",
+                optionA: "Only numbers",
+                optionB: "People, places and organizations",
+                optionC: "Only HTML tags",
+                optionD: "Only images",
+                correctAnswer: "B",
+                marks: 1
+            },
+
+            {
+                question: "Which application commonly uses NLP?",
+                optionA: "Calculator",
+                optionB: "Paint",
+                optionC: "Chatbot",
+                optionD: "File Explorer",
+                correctAnswer: "C",
+                marks: 1
+            },
+
+            {
+                question: "Text classification means:",
+                optionA: "Deleting text",
+                optionB: "Converting text to image",
+                optionC: "Printing text",
+                optionD: "Assigning text to categories",
+                correctAnswer: "D",
+                marks: 1
+            },
+
+            {
+                question: "Machine translation is used to:",
+                optionA: "Translate one language into another",
+                optionB: "Compress images",
+                optionC: "Increase RAM",
+                optionD: "Create hardware",
+                correctAnswer: "A",
+                marks: 1
+            },
+
+            {
+                question: "Speech recognition converts:",
+                optionA: "Text into image",
+                optionB: "Speech into text",
+                optionC: "Image into video",
+                optionD: "Code into hardware",
+                correctAnswer: "B",
+                marks: 1
+            }
+
+        ];
+
+
+        // =========================================================
+        // EXAM DATA
+        // =========================================================
+
+        const exams = [
+
+            {
+                id: "software_testing_exam_01",
+
+                data: {
+                    title: "Software Testing Exam",
+                    description: "Basic Software Testing and Manual Testing",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "Software Testing",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: softwareTestingQuestions
+            },
+
+
+            {
+                id: "data_science_exam_01",
+
+                data: {
+                    title: "Data Science Exam",
+                    description: "Basic Data Science Concepts",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "Data Science",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: dataScienceQuestions
+            },
+
+
+            {
+                id: "coa_exam_01",
+
+                data: {
+                    title: "Computer Organization & Architecture Exam",
+                    description: "Basic COA Concepts",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "Computer Organization & Architecture",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: coaQuestions
+            },
+
+
+            {
+                id: "computer_graphics_exam_01",
+
+                data: {
+                    title: "Computer Graphics Exam",
+                    description: "Basic Computer Graphics Concepts",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "Computer Graphics",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: computerGraphicsQuestions
+            },
+
+
+            {
+                id: "web_development_exam_01",
+
+                data: {
+                    title: "Web Development Exam",
+                    description: "HTML CSS JavaScript and Web Concepts",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "Web Development",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: webDevelopmentQuestions
+            },
+
+
+            {
+                id: "devops_exam_01",
+
+                data: {
+                    title: "DevOps Exam",
+                    description: "Basic DevOps Concepts",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "DevOps",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: devopsQuestions
+            },
+
+
+            {
+                id: "big_data_exam_01",
+
+                data: {
+                    title: "Big Data Exam",
+                    description: "Basic Big Data Concepts",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "Big Data",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: bigDataQuestions
+            },
+
+
+            {
+                id: "nlp_exam_01",
+
+                data: {
+                    title: "Natural Language Processing Exam",
+                    description: "Basic NLP Concepts",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "Natural Language Processing",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+
+                questions: nlpQuestions
+            }
+
+        ];
+
+
+        // =========================================================
+        // ADD ONE EXAM
+        // =========================================================
+
+        async function addExam(exam) {
+
+            console.log("Adding exam:", exam.data.title);
+
+            // Exam document
+            const examRef =
+                db.collection("exams").doc(exam.id);
+
+
+            // Save exam
+            await examRef.set(exam.data, { merge: true });
+
+
+            // Create batch
+            const batch = db.batch();
+
+
+            // Add exactly 10 questions
+            exam.questions.forEach(function (question, index) {
+
+                const questionId =
+                    "q" + (index + 1);
+
+                const questionRef =
+                    examRef
+                        .collection("questions")
+                        .doc(questionId);
+
+
+                batch.set(questionRef, question);
+
+            });
+
+
+            // Commit questions
+            await batch.commit();
+
+
+            console.log(
+                "Successfully added:",
+                exam.data.title
+            );
+
+        }
+
+
+        // =========================================================
+        // BUTTON CLICK
+        // =========================================================
+
+        addButton.addEventListener("click", async function () {
+
+            console.log("ADD BUTTON CLICKED");
+
+            if (!currentUser) {
+
+                showStatus(
+                    "❌ You are not logged in.\nPlease login first.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            // Disable button during upload
+            addButton.disabled = true;
+
+            addButton.innerText =
+                "⏳ Adding Exams...";
+
+
+            showStatus(
+                "Starting Part 2 upload...\nPlease wait.",
+                "info"
+            );
+
+
+            try {
+
+                let examCount = 0;
+
+                let questionCount = 0;
+
+
+                // Add exams one by one
+                for (const exam of exams) {
+
+                    showStatus(
+                        "⏳ Adding: " +
+                        exam.data.title +
+                        "\n\nExam " +
+                        (examCount + 1) +
+                        " of 8",
+                        "info"
+                    );
+
+
+                    await addExam(exam);
+
+
+                    examCount += 1;
+
+                    questionCount +=
+                        exam.questions.length;
+
+                }
+
+
+                // SUCCESS
+                showStatus(
+                    "✅ PART 2 ADDED SUCCESSFULLY!\n\n" +
+
+                    "📚 Exams Added: " +
+                    examCount +
+                    "\n" +
+
+                    "📝 Questions Added: " +
+                    questionCount +
+                    "\n\n" +
+
+                    "All 8 exams and 80 questions are now stored in Firebase Firestore.",
+                    "success"
+                );
+
+
+                addButton.innerText =
+                    "✅ Part 2 Added Successfully";
+
+
+            } catch (error) {
+
+                console.error(
+                    "ERROR WHILE ADDING EXAMS:",
+                    error
+                );
+
+
+                showStatus(
+                    "❌ ERROR WHILE ADDING EXAMS\n\n" +
+
+                    "Message:\n" +
+                    error.message +
+                    "\n\n" +
+
+                    "Error Code:\n" +
+                    (error.code || "Unknown") +
+                    "\n\n" +
+
+                    "Open Browser Console (F12) for details.",
+                    "error"
+                );
+
+
+                addButton.disabled = false;
+
+                addButton.innerText =
+                    "🔄 Try Again";
+
+            }
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add HTML & CSS Exams</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 500px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        #status {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="card-header bg-primary text-white text-center">
+        <h4 class="mb-0">Online Examination System</h4>
+        <small>Add HTML & CSS Exams</small>
+    </div>
+
+    <div class="card-body text-center">
+
+        <p>
+            Click the button below to add:
+        </p>
+
+        <ul class="text-start">
+            <li>HTML Programming Exam</li>
+            <li>10 HTML Questions</li>
+            <li>CSS Programming Exam</li>
+            <li>10 CSS Questions</li>
+        </ul>
+
+        <button
+            id="addExamsBtn"
+            class="btn btn-primary btn-lg w-100"
+        >
+            Add HTML & CSS Exams
+        </button>
+
+        <div id="status" class="alert"></div>
+
+    </div>
+</div>
+
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+
+<script>
+
+    // ==========================================
+    // FIREBASE CONFIG
+    // ==========================================
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDe5o4C6FFWc_O8LcUao61xHHnlruKtIZc",
+        authDomain: "online-examination-syste-21adf.firebaseapp.com",
+        projectId: "online-examination-syste-21adf",
+        storageBucket: "online-examination-syste-21adf.firebasestorage.app",
+        messagingSenderId: "271890466949",
+        appId: "1:271890466949:web:13ff78e6523d28ad7ac1ec",
+        measurementId: "G-BSMQ1MB3J0"
+    };
+
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
+    const db = firebase.firestore();
+
+
+    // ==========================================
+    // HTML QUESTIONS
+    // ==========================================
+
+    const htmlQuestions = [
+
+        {
+            question: "What does HTML stand for?",
+            optionA: "Hyper Text Markup Language",
+            optionB: "High Text Machine Language",
+            optionC: "Hyperlink Text Management Language",
+            optionD: "Home Tool Markup Language",
+            correctAnswer: "A",
+            marks: 1
+        },
+
+        {
+            question: "Which tag is used to create a hyperlink?",
+            optionA: "<link>",
+            optionB: "<a>",
+            optionC: "<href>",
+            optionD: "<url>",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which tag is used to insert an image?",
+            optionA: "<image>",
+            optionB: "<picture>",
+            optionC: "<img>",
+            optionD: "<src>",
+            correctAnswer: "C",
+            marks: 1
+        },
+
+        {
+            question: "Which HTML tag is used for the largest heading?",
+            optionA: "<heading>",
+            optionB: "<h6>",
+            optionC: "<head>",
+            optionD: "<h1>",
+            correctAnswer: "D",
+            marks: 1
+        },
+
+        {
+            question: "Which attribute specifies the destination of a hyperlink?",
+            optionA: "src",
+            optionB: "href",
+            optionC: "link",
+            optionD: "url",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which tag is used to create an unordered list?",
+            optionA: "<ol>",
+            optionB: "<li>",
+            optionC: "<ul>",
+            optionD: "<list>",
+            correctAnswer: "C",
+            marks: 1
+        },
+
+        {
+            question: "Which HTML element is used to create a table row?",
+            optionA: "<td>",
+            optionB: "<tr>",
+            optionC: "<th>",
+            optionD: "<row>",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which attribute provides alternative text for an image?",
+            optionA: "title",
+            optionB: "src",
+            optionC: "alt",
+            optionD: "text",
+            correctAnswer: "C",
+            marks: 1
+        },
+
+        {
+            question: "Which HTML element is used to create a form?",
+            optionA: "<input>",
+            optionB: "<form>",
+            optionC: "<field>",
+            optionD: "<data>",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which HTML element represents the main content of a webpage?",
+            optionA: "<main>",
+            optionB: "<body>",
+            optionC: "<content>",
+            optionD: "<section>",
+            correctAnswer: "A",
+            marks: 1
+        }
+
+    ];
+
+
+    // ==========================================
+    // CSS QUESTIONS
+    // ==========================================
+
+    const cssQuestions = [
+
+        {
+            question: "What does CSS stand for?",
+            optionA: "Computer Style Sheets",
+            optionB: "Cascading Style Sheets",
+            optionC: "Creative Style System",
+            optionD: "Colorful Style Sheets",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which property is used to change the text color?",
+            optionA: "font-color",
+            optionB: "text-color",
+            optionC: "color",
+            optionD: "foreground",
+            correctAnswer: "C",
+            marks: 1
+        },
+
+        {
+            question: "Which property is used to change the background color?",
+            optionA: "bgcolor",
+            optionB: "background-color",
+            optionC: "background",
+            optionD: "color-background",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which CSS property is used to change the font size?",
+            optionA: "font-style",
+            optionB: "text-size",
+            optionC: "font-size",
+            optionD: "size",
+            correctAnswer: "C",
+            marks: 1
+        },
+
+        {
+            question: "Which symbol is used to select an element by its ID?",
+            optionA: ".",
+            optionB: "#",
+            optionC: "@",
+            optionD: "*",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which symbol is used to select elements by their class?",
+            optionA: "#",
+            optionB: "@",
+            optionC: ".",
+            optionD: "*",
+            correctAnswer: "C",
+            marks: 1
+        },
+
+        {
+            question: "Which CSS property is used to make text bold?",
+            optionA: "font-weight",
+            optionB: "text-bold",
+            optionC: "font-style",
+            optionD: "font-bold",
+            correctAnswer: "A",
+            marks: 1
+        },
+
+        {
+            question: "Which CSS property is used to add space inside an element?",
+            optionA: "margin",
+            optionB: "padding",
+            optionC: "spacing",
+            optionD: "border-spacing",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which CSS property is used to control the space outside an element?",
+            optionA: "padding",
+            optionB: "margin",
+            optionC: "spacing",
+            optionD: "outside",
+            correctAnswer: "B",
+            marks: 1
+        },
+
+        {
+            question: "Which CSS property is commonly used to create a flexible layout?",
+            optionA: "position",
+            optionB: "display: flex",
+            optionC: "float: flex",
+            optionD: "layout: flex",
+            correctAnswer: "B",
+            marks: 1
+        }
+
+    ];
+
+
+    // ==========================================
+    // ADD EXAM FUNCTION
+    // ==========================================
+
+    async function addExam(examId, examData, questions) {
+
+        // Create exam document
+        await db.collection("exams")
+            .doc(examId)
+            .set(examData);
+
+
+        // Create batch
+        const batch = db.batch();
+
+
+        // Add all questions
+        questions.forEach((q) => {
+
+            const questionRef = db
+                .collection("exams")
+                .doc(examId)
+                .collection("questions")
+                .doc();
+
+            batch.set(questionRef, q);
+
+        });
+
+
+        // Save all questions together
+        await batch.commit();
+    }
+
+
+    // ==========================================
+    // BUTTON CLICK
+    // ==========================================
+
+    document
+        .getElementById("addExamsBtn")
+        .addEventListener("click", async function () {
+
+            const button = this;
+            const status = document.getElementById("status");
+
+
+            button.disabled = true;
+            button.innerText = "Adding Exams...";
+
+
+            status.style.display = "block";
+            status.className = "alert alert-info";
+            status.innerText = "Please wait...";
+
+
+            try {
+
+                // ======================================
+                // HTML EXAM
+                // ======================================
+
+                await addExam(
+
+                    "html_exam_01",
+
+                    {
+                        title: "HTML Programming Exam",
+                        description: "Basic HTML Programming",
+                        duration: 30,
+                        isActive: true,
+                        status: "active",
+                        subject: "HTML",
+                        totalMarks: 10,
+                        totalQuestions: 10
+                    },
+
+                    htmlQuestions
+                );
+
+
+                // ======================================
+                // CSS EXAM
+                // ======================================
+
+                await addExam(
+
+                    "css_exam_01",
+
+                    {
+                        title: "CSS Programming Exam",
+                        description: "Basic CSS Programming",
+                        duration: 30,
+                        isActive: true,
+                        status: "active",
+                        subject: "CSS",
+                        totalMarks: 10,
+                        totalQuestions: 10
+                    },
+
+                    cssQuestions
+                );
+                
+
+
+                // ======================================
+                // SUCCESS
+                // ======================================
+
+                status.className = "alert alert-success";
+
+                status.innerHTML = `
+                    <strong>Success! 🎉</strong><br>
+                    HTML Exam + 10 Questions added.<br>
+                    CSS Exam + 10 Questions added.
+                `;
+
+                button.innerText = "Exams Added Successfully";
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                status.className = "alert alert-danger";
+
+                status.innerHTML = `
+                    <strong>Error!</strong><br>
+                    ${error.message}
+                `;
+
+                button.disabled = false;
+                button.innerText = "Try Again";
+
+            }
+
+        });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+@media (max-width: 992px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .sidebar-toggle {
+    display: block !important;
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .sidebar-overlay.show {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .welcome-banner {
+    padding: 24px;
+  }
+
+  .exam-header-bar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .exam-nav {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .question-card {
+    padding: 20px;
+  }
+
+  .auth-body {
+    padding: 24px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-score {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card .stat-value {
+    font-size: 1.4rem;
+  }
+
+  .palette-grid {
+    grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+  }
+
+  .palette-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+}
+
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--dark-color);
+  cursor: pointer;
+}

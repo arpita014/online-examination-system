@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Java Questions</title>
+</head>
+
+<body>
+
+<h2>Adding Java Questions...</h2>
+<p id="status">Please wait...</p>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDe5o4C6FFWc_O8LcUao61xHHnlruKtIZc",
+    authDomain: "online-examination-syste-21adf.firebaseapp.com",
+    projectId: "online-examination-syste-21adf",
+    storageBucket: "online-examination-syste-21adf.firebasestorage.app",
+    messagingSenderId: "271890466949",
+    appId: "1:271890466949:web:13ff78e6523d28ad7ac1ec",
+    measurementId: "G-BSMQ1MB3J0"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
+const examId = "THycMb3BIb8wNQ17yyEr";
+
+const questions = [
+
+    {
+        question: "Which keyword is used to create a class in Java?",
+        optionA: "class",
+        optionB: "Class",
+        optionC: "struct",
+        optionD: "object",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which method is the entry point of a Java program?",
+        optionA: "start()",
+        optionB: "main()",
+        optionC: "run()",
+        optionD: "execute()",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which of these is NOT a primitive data type in Java?",
+        optionA: "int",
+        optionB: "float",
+        optionC: "String",
+        optionD: "char",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to inherit a class in Java?",
+        optionA: "implements",
+        optionB: "extends",
+        optionC: "inherits",
+        optionD: "super",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which symbol is used to end a statement in Java?",
+        optionA: ":",
+        optionB: ".",
+        optionC: ";",
+        optionD: ",",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to create an object in Java?",
+        optionA: "create",
+        optionB: "object",
+        optionC: "new",
+        optionD: "class",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which concept allows the same method name with different parameters?",
+        optionA: "Inheritance",
+        optionB: "Method Overloading",
+        optionC: "Encapsulation",
+        optionD: "Abstraction",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to define a constant variable in Java?",
+        optionA: "static",
+        optionB: "constant",
+        optionC: "final",
+        optionD: "const",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which data type is used to store true or false values in Java?",
+        optionA: "boolean",
+        optionB: "bool",
+        optionC: "BooleanValue",
+        optionD: "logical",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to handle an exception in Java?",
+        optionA: "error",
+        optionB: "exception",
+        optionC: "catch",
+        optionD: "handle",
+        correctAnswer: "C",
+        marks: 1
+    }
+
+];
+
+async function addQuestions() {
+
+    const status = document.getElementById("status");
+
+    try {
+
+        status.innerText = "Connecting to Firebase...";
+
+        const batch = db.batch();
+
+        questions.forEach((question, index) => {
+
+            const questionRef = db
+                .collection("exams")
+                .doc(examId)
+                .collection("questions")
+                .doc("question" + (index + 1));
+
+            batch.set(questionRef, question);
+
+        });
+
+        await batch.commit();
+
+        await db
+            .collection("exams")
+            .doc(examId)
+            .update({
+                totalQuestions: 10,
+                totalMarks: 10
+            });
+
+        status.innerHTML =
+            "✅ SUCCESS! 10 Java questions added to Firebase.";
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.innerHTML =
+            "❌ ERROR: " + error.message;
+
+    }
+}
+
+addQuestions();
+
+</script>
+
+</body>
+</html>

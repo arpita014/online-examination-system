@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add New Programming Exams</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 550px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        #status {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="card-header bg-primary text-white text-center">
+        <h4 class="mb-0">Online Examination System</h4>
+        <small>Add New Programming Exams</small>
+    </div>
+
+    <div class="card-body">
+
+        <h5 class="text-center mb-3">
+            New Exams
+        </h5>
+
+        <div class="mb-3">
+            <div>🟨 JavaScript — 10 Questions</div>
+            <div>⚛️ React — 10 Questions</div>
+            <div>🗄️ MySQL — 10 Questions</div>
+            <div>🧩 DBMS — 10 Questions</div>
+        </div>
+
+        <button
+            id="addNewExamsBtn"
+            class="btn btn-primary btn-lg w-100">
+            Add 4 New Exams
+        </button>
+
+        <div id="status" class="alert"></div>
+
+    </div>
+</div>
+
+
+<!-- ==========================================
+     FIREBASE
+========================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+
+<script>
+
+// ==========================================
+// FIREBASE CONFIG
+// ==========================================
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyDe5o4C6FFWc_O8LcUao61xHHnlruKtIZc",
+
+    authDomain:
+        "online-examination-syste-21adf.firebaseapp.com",
+
+    projectId:
+        "online-examination-syste-21adf",
+
+    storageBucket:
+        "online-examination-syste-21adf.firebasestorage.app",
+
+    messagingSenderId:
+        "271890466949",
+
+    appId:
+        "1:271890466949:web:13ff78e6523d28ad7ac1ec",
+
+    measurementId:
+        "G-BSMQ1MB3J0"
+};
+
+
+// Initialize Firebase
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const db = firebase.firestore();
+
+
+// ==========================================
+// JAVASCRIPT QUESTIONS
+// ==========================================
+
+const javascriptQuestions = [
+
+    {
+        question: "Which keyword is used to declare a variable in JavaScript?",
+        optionA: "var",
+        optionB: "variable",
+        optionC: "int",
+        optionD: "string",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which symbol is used for single-line comments in JavaScript?",
+        optionA: "/* */",
+        optionB: "//",
+        optionC: "#",
+        optionD: "<!-- -->",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which method is used to print output in the browser console?",
+        optionA: "console.log()",
+        optionB: "print()",
+        optionC: "display()",
+        optionD: "write.console()",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which data type represents true or false?",
+        optionA: "String",
+        optionB: "Number",
+        optionC: "Boolean",
+        optionD: "Object",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which operator is used for strict equality?",
+        optionA: "=",
+        optionB: "==",
+        optionC: "===",
+        optionD: "!=",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to define a constant?",
+        optionA: "let",
+        optionB: "const",
+        optionC: "constant",
+        optionD: "fixed",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which method adds an element to the end of an array?",
+        optionA: "push()",
+        optionB: "pop()",
+        optionC: "shift()",
+        optionD: "add()",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which method removes the last element from an array?",
+        optionA: "delete()",
+        optionB: "remove()",
+        optionC: "pop()",
+        optionD: "shift()",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to define a function?",
+        optionA: "function",
+        optionB: "def",
+        optionC: "fun",
+        optionD: "method",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which object is used to interact with the HTML document?",
+        optionA: "window",
+        optionB: "document",
+        optionC: "browser",
+        optionD: "html",
+        correctAnswer: "B",
+        marks: 1
+    }
+
+];
+
+
+// ==========================================
+// REACT QUESTIONS
+// ==========================================
+
+const reactQuestions = [
+
+    {
+        question: "What is React?",
+        optionA: "A database",
+        optionB: "A JavaScript library for building user interfaces",
+        optionC: "A programming language",
+        optionD: "An operating system",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Who developed React?",
+        optionA: "Google",
+        optionB: "Microsoft",
+        optionC: "Facebook",
+        optionD: "Amazon",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which syntax is commonly used in React to write HTML-like code?",
+        optionA: "XML",
+        optionB: "JSX",
+        optionC: "JSON",
+        optionD: "CSS",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which hook is used to manage state in a functional component?",
+        optionA: "useEffect",
+        optionB: "useState",
+        optionC: "useData",
+        optionD: "useComponent",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which hook is commonly used for side effects?",
+        optionA: "useState",
+        optionB: "useEffect",
+        optionC: "useSideEffect",
+        optionD: "useAction",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "What is a React component?",
+        optionA: "A database table",
+        optionB: "A reusable UI building block",
+        optionC: "A CSS property",
+        optionD: "A server",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which command is commonly used to create a React application with Vite?",
+        optionA: "npm create vite@latest",
+        optionB: "npm install react-app",
+        optionC: "react create project",
+        optionD: "npm start react",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "How are data passed from a parent component to a child component?",
+        optionA: "Using props",
+        optionB: "Using loops",
+        optionC: "Using CSS",
+        optionD: "Using SQL",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is the purpose of the key prop in React lists?",
+        optionA: "To style elements",
+        optionB: "To uniquely identify list elements",
+        optionC: "To create a database key",
+        optionD: "To define CSS",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which file commonly contains the main App component in a React project?",
+        optionA: "App.jsx",
+        optionB: "index.sql",
+        optionC: "style.css",
+        optionD: "database.js",
+        correctAnswer: "A",
+        marks: 1
+    }
+
+];
+
+
+// ==========================================
+// MYSQL QUESTIONS
+// ==========================================
+
+const mysqlQuestions = [
+
+    {
+        question: "What is MySQL?",
+        optionA: "A programming language",
+        optionB: "A relational database management system",
+        optionC: "An operating system",
+        optionD: "A web browser",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which SQL command is used to retrieve data?",
+        optionA: "GET",
+        optionB: "SELECT",
+        optionC: "FETCH",
+        optionD: "READ",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which command is used to add a new record?",
+        optionA: "ADD",
+        optionB: "INSERT",
+        optionC: "CREATE",
+        optionD: "UPDATE",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which command is used to modify existing records?",
+        optionA: "CHANGE",
+        optionB: "MODIFY",
+        optionC: "UPDATE",
+        optionD: "ALTER",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which command is used to remove records from a table?",
+        optionA: "REMOVE",
+        optionB: "DELETE",
+        optionC: "DROP",
+        optionD: "CLEAR",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which clause is used to filter records?",
+        optionA: "FILTER",
+        optionB: "WHERE",
+        optionC: "HAVING",
+        optionD: "SELECT",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which key uniquely identifies each record in a table?",
+        optionA: "Foreign Key",
+        optionB: "Primary Key",
+        optionC: "Candidate Key",
+        optionD: "Super Key",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which SQL command is used to create a database?",
+        optionA: "MAKE DATABASE",
+        optionB: "NEW DATABASE",
+        optionC: "CREATE DATABASE",
+        optionD: "BUILD DATABASE",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which clause is used to sort query results?",
+        optionA: "SORT BY",
+        optionB: "ORDER BY",
+        optionC: "GROUP BY",
+        optionD: "ARRANGE BY",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which SQL function returns the number of records?",
+        optionA: "SUM()",
+        optionB: "TOTAL()",
+        optionC: "COUNT()",
+        optionD: "NUMBER()",
+        correctAnswer: "C",
+        marks: 1
+    }
+
+];
+
+
+// ==========================================
+// DBMS QUESTIONS
+// ==========================================
+
+const dbmsQuestions = [
+
+    {
+        question: "What does DBMS stand for?",
+        optionA: "Database Management System",
+        optionB: "Data Backup Management System",
+        optionC: "Database Machine System",
+        optionD: "Data Management Software",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which of the following is a DBMS?",
+        optionA: "MySQL",
+        optionB: "HTML",
+        optionC: "CSS",
+        optionD: "JavaScript",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is a database?",
+        optionA: "A collection of organized data",
+        optionB: "A programming language",
+        optionC: "A web page",
+        optionD: "An operating system",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is a primary key?",
+        optionA: "A key that allows duplicate values",
+        optionB: "A key that uniquely identifies a record",
+        optionC: "A key used only for sorting",
+        optionD: "A key used for formatting",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "What is a foreign key?",
+        optionA: "A key that references a key in another table",
+        optionB: "A password for a database",
+        optionC: "A duplicate primary key",
+        optionD: "A temporary key",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is normalization used for?",
+        optionA: "Increasing data redundancy",
+        optionB: "Reducing data redundancy",
+        optionC: "Deleting all data",
+        optionD: "Increasing duplicate records",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which normal form removes repeating groups?",
+        optionA: "1NF",
+        optionB: "2NF",
+        optionC: "3NF",
+        optionD: "BCNF",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is a transaction in DBMS?",
+        optionA: "A single database operation or group of operations",
+        optionB: "A database password",
+        optionC: "A table column",
+        optionD: "A database user",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which property ensures that a transaction is completed fully or not at all?",
+        optionA: "Consistency",
+        optionB: "Isolation",
+        optionC: "Atomicity",
+        optionD: "Durability",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "What does SQL stand for?",
+        optionA: "Structured Query Language",
+        optionB: "Simple Query Language",
+        optionC: "System Query Language",
+        optionD: "Structured Question Language",
+        correctAnswer: "A",
+        marks: 1
+    }
+
+];
+
+
+// ==========================================
+// ADD EXAM FUNCTION
+// ==========================================
+
+async function addExam(examId, examData, questions) {
+
+    // Create / update exam document
+    await db.collection("exams")
+        .doc(examId)
+        .set(examData);
+
+    // Create batch
+    const batch = db.batch();
+
+    // Add questions
+    questions.forEach((q) => {
+
+        const questionRef = db
+            .collection("exams")
+            .doc(examId)
+            .collection("questions")
+            .doc();
+
+        batch.set(questionRef, q);
+
+    });
+
+    // Save all questions
+    await batch.commit();
+}
+
+
+// ==========================================
+// BUTTON CLICK
+// ==========================================
+
+document
+    .getElementById("addNewExamsBtn")
+    .addEventListener("click", async function () {
+
+        const button = this;
+        const status = document.getElementById("status");
+
+        button.disabled = true;
+        button.innerText = "Adding Exams...";
+
+        status.style.display = "block";
+        status.className = "alert alert-info";
+        status.innerText = "Please wait...";
+
+        try {
+
+            // ==========================================
+            // JAVASCRIPT EXAM
+            // ==========================================
+
+            await addExam(
+                "javascript_exam_01",
+                {
+                    title: "JavaScript Programming Exam",
+                    description: "Basic JavaScript Programming",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "JavaScript",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+                javascriptQuestions
+            );
+
+
+            // ==========================================
+            // REACT EXAM
+            // ==========================================
+
+            await addExam(
+                "react_exam_01",
+                {
+                    title: "React Programming Exam",
+                    description: "Basic React Programming",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "React",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+                reactQuestions
+            );
+
+
+            // ==========================================
+            // MYSQL EXAM
+            // ==========================================
+
+            await addExam(
+                "mysql_exam_01",
+                {
+                    title: "MySQL Programming Exam",
+                    description: "Basic MySQL and SQL",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "MySQL",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+                mysqlQuestions
+            );
+
+
+            // ==========================================
+            // DBMS EXAM
+            // ==========================================
+
+            await addExam(
+                "dbms_exam_01",
+                {
+                    title: "DBMS Exam",
+                    description: "Database Management System",
+                    duration: 30,
+                    isActive: true,
+                    status: "active",
+                    subject: "DBMS",
+                    totalMarks: 10,
+                    totalQuestions: 10
+                },
+                dbmsQuestions
+            );
+
+
+            // ==========================================
+            // SUCCESS
+            // ==========================================
+
+            status.className = "alert alert-success";
+
+            status.innerHTML = `
+                <strong>Success! 🎉</strong><br><br>
+                ✅ JavaScript Exam — 10 Questions<br>
+                ✅ React Exam — 10 Questions<br>
+                ✅ MySQL Exam — 10 Questions<br>
+                ✅ DBMS Exam — 10 Questions
+            `;
+
+            button.innerText = "4 Exams Added Successfully";
+
+
+        } catch (error) {
+
+            console.error("ERROR:", error);
+
+            status.className = "alert alert-danger";
+
+            status.innerHTML = `
+                <strong>Error!</strong><br>
+                ${error.message}
+            `;
+
+            button.disabled = false;
+            button.innerText = "Try Again";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

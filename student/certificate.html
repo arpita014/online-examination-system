@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Certificate of Completion</title>
+
+    <link rel="stylesheet" href="../css/certificate.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script src="../js/firebase-config.js"></script>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <div class="certificate" id="certificate">
+
+            <div class="top-decoration">
+                <span>✦</span>
+                <span>✦</span>
+                <span>✦</span>
+            </div>
+
+            <div class="certificate-header">
+
+                <div class="logo">🎓</div>
+
+                <h1>CERTIFICATE</h1>
+
+                <h2>OF COMPLETION</h2>
+
+                <div class="line"></div>
+
+                <p class="certify-text">
+                    This is to certify that
+                </p>
+
+            </div>
+
+            <div class="student-section">
+
+                <h3 id="studentName">
+                    Loading...
+                </h3>
+
+                <p>
+                    has successfully completed the
+                </p>
+
+                <h2 id="examTitle">
+                    Loading...
+                </h2>
+
+            </div>
+
+            <div class="details">
+
+                <div class="detail-box">
+                    <span>Score</span>
+                    <strong id="score">-</strong>
+                </div>
+
+                <div class="detail-box">
+                    <span>Percentage</span>
+                    <strong id="percentage">-</strong>
+                </div>
+
+                <div class="detail-box">
+                    <span>Date</span>
+                    <strong id="examDate">-</strong>
+                </div>
+
+            </div>
+
+            <div class="certificate-id">
+
+                <span>Certificate ID</span>
+
+                <strong id="certificateId">
+                    -
+                </strong>
+
+            </div>
+
+            <div class="footer">
+
+                <div class="signature">
+                    <div class="signature-line"></div>
+                    <p>Authorized Signature</p>
+                </div>
+
+                <div class="organization">
+                    <strong>Online Examination System</strong>
+                    <p>Certificate of Achievement</p>
+                </div>
+
+                <div class="signature">
+                    <div class="signature-line"></div>
+                    <p>Exam Administrator</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <button onclick="window.print()" class="print-btn">
+                🖨️ Print Certificate
+            </button>
+
+            <button onclick="goToDashboard()" class="dashboard-btn">
+                🏠 Dashboard
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="../js/certificate.js"></script>
+
+</body>
+</html>

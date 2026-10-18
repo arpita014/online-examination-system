@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Part 1 Exams</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 600px;
+            max-width: 95%;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 25px;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .card-header h4 {
+            font-size: 28px;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .exam-list {
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .exam-list li {
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        #addExamsBtn {
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 20px;
+        }
+
+        #status {
+            margin-top: 20px;
+            display: none;
+            border-radius: 10px;
+        }
+
+        .progress {
+            height: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        #progressText {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+            display: none;
+        }
+
+        .success-list {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .success-list li {
+            margin-bottom: 5px;
+        }
+
+        .checking {
+            color: #555;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+    <!-- HEADER -->
+
+    <div class="card-header bg-primary text-white text-center">
+
+        <h4 class="mb-1">
+            Online Examination System
+        </h4>
+
+        <small>
+            Add Part 1 Exams
+        </small>
+
+    </div>
+
+
+    <!-- BODY -->
+
+    <div class="card-body">
+
+        <p class="text-center fs-5">
+
+            This will add
+
+            <strong>
+                8 Exams + 80 Questions
+            </strong>
+
+        </p>
+
+
+        <ul class="exam-list">
+
+            <li>
+                Java Programming – 10 Questions
+            </li>
+
+            <li>
+                Operating Systems – 10 Questions
+            </li>
+
+            <li>
+                Computer Networks – 10 Questions
+            </li>
+
+            <li>
+                Cloud Computing – 10 Questions
+            </li>
+
+            <li>
+                Artificial Intelligence – 10 Questions
+            </li>
+
+            <li>
+                Machine Learning – 10 Questions
+            </li>
+
+            <li>
+                Cyber Security – 10 Questions
+            </li>
+
+            <li>
+                Software Engineering – 10 Questions
+            </li>
+
+        </ul>
+
+
+        <button
+            id="addExamsBtn"
+            class="btn btn-primary btn-lg w-100"
+        >
+            Add Part 1 Exams
+        </button>
+
+
+        <!-- PROGRESS -->
+
+        <div
+            class="progress"
+            id="progressContainer"
+        >
+
+            <div
+                id="progressBar"
+                class="progress-bar progress-bar-striped progress-bar-animated"
+                style="width: 0%"
+            >
+            </div>
+
+        </div>
+
+
+        <div id="progressText">
+            Preparing...
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div
+            id="status"
+            class="alert"
+        >
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ===================================================== -->
+<!-- FIREBASE -->
+<!-- ===================================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+
+
+<script>
+
+
+// =====================================================
+// FIREBASE CONFIG
+// =====================================================
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyDe5o4C6FFWc_O8LcUao61xHHnlruKtIZc",
+
+    authDomain: "online-examination-syste-21adf.firebaseapp.com",
+
+    projectId: "online-examination-syste-21adf",
+
+    storageBucket: "online-examination-syste-21adf.firebasestorage.app",
+
+    messagingSenderId: "271890466949",
+
+    appId: "1:271890466949:web:13ff78e6523d28ad7ac1ec",
+
+    measurementId: "G-BSMQ1MB3J0"
+
+};
+
+
+// =====================================================
+// INITIALIZE FIREBASE FIRST
+// =====================================================
+
+if (!firebase.apps.length) {
+
+    firebase.initializeApp(firebaseConfig);
+
+}
+
+const db = firebase.firestore();
+
+const auth = firebase.auth();
+
+
+
+// =====================================================
+// JAVA QUESTIONS
+// =====================================================
+
+const javaQuestions = [
+
+    {
+        question: "Which keyword is used to create a class in Java?",
+        optionA: "function",
+        optionB: "class",
+        optionC: "define",
+        optionD: "struct",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which method is the entry point of a Java program?",
+        optionA: "start()",
+        optionB: "run()",
+        optionC: "main()",
+        optionD: "execute()",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which concept allows a class to acquire properties of another class?",
+        optionA: "Encapsulation",
+        optionB: "Inheritance",
+        optionC: "Abstraction",
+        optionD: "Compilation",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used for inheritance between classes?",
+        optionA: "implements",
+        optionB: "inherits",
+        optionC: "extends",
+        optionD: "super",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which of the following is NOT a primitive data type in Java?",
+        optionA: "int",
+        optionB: "float",
+        optionC: "String",
+        optionD: "boolean",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to create an object in Java?",
+        optionA: "object",
+        optionB: "create",
+        optionC: "new",
+        optionD: "class",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Having the same method name with different parameters is called?",
+        optionA: "Inheritance",
+        optionB: "Method Overloading",
+        optionC: "Encapsulation",
+        optionD: "Interface",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is commonly used to handle exceptions?",
+        optionA: "error",
+        optionB: "exception",
+        optionC: "try",
+        optionD: "catching",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which collection does not allow duplicate elements?",
+        optionA: "ArrayList",
+        optionB: "LinkedList",
+        optionC: "HashSet",
+        optionD: "Vector",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword prevents a class from being inherited?",
+        optionA: "static",
+        optionB: "private",
+        optionC: "final",
+        optionD: "protected",
+        correctAnswer: "C",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// OPERATING SYSTEM QUESTIONS
+// =====================================================
+
+const osQuestions = [
+
+    {
+        question: "What is the main function of an operating system?",
+        optionA: "Create websites",
+        optionB: "Manage computer resources",
+        optionC: "Design hardware",
+        optionD: "Write programs",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which of the following is an operating system?",
+        optionA: "Oracle",
+        optionB: "Linux",
+        optionC: "Python",
+        optionD: "MySQL",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "A program in execution is called a:",
+        optionA: "Process",
+        optionB: "File",
+        optionC: "Thread",
+        optionD: "Command",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which scheduling algorithm executes the process with the shortest burst time first?",
+        optionA: "FCFS",
+        optionB: "Round Robin",
+        optionC: "SJF",
+        optionD: "FIFO",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which memory management technique uses fixed-size blocks?",
+        optionA: "Paging",
+        optionB: "Segmentation",
+        optionC: "Compaction",
+        optionD: "Swapping",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which condition is necessary for deadlock?",
+        optionA: "Mutual exclusion",
+        optionB: "Compilation",
+        optionC: "Execution",
+        optionD: "Paging",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which OS component manages processes?",
+        optionA: "Process scheduler",
+        optionB: "Compiler",
+        optionC: "Browser",
+        optionD: "Editor",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Virtual memory mainly uses:",
+        optionA: "CPU registers",
+        optionB: "Hard disk or SSD space",
+        optionC: "Keyboard",
+        optionD: "Monitor",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which scheduling algorithm uses a time quantum?",
+        optionA: "FCFS",
+        optionB: "SJF",
+        optionC: "Round Robin",
+        optionD: "Priority",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which part of the operating system interacts directly with hardware?",
+        optionA: "Kernel",
+        optionB: "Application",
+        optionC: "Browser",
+        optionD: "Database",
+        correctAnswer: "A",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// COMPUTER NETWORK QUESTIONS
+// =====================================================
+
+const networkQuestions = [
+
+    {
+        question: "What does LAN stand for?",
+        optionA: "Local Area Network",
+        optionB: "Large Area Network",
+        optionC: "Logical Area Network",
+        optionD: "Local Access Node",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which device forwards packets between different networks?",
+        optionA: "Hub",
+        optionB: "Switch",
+        optionC: "Router",
+        optionD: "Repeater",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which protocol is used to access web pages?",
+        optionA: "HTTP",
+        optionB: "FTP",
+        optionC: "SMTP",
+        optionD: "SSH",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which protocol is used for sending emails?",
+        optionA: "HTTP",
+        optionB: "SMTP",
+        optionC: "FTP",
+        optionD: "DNS",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "What does IP stand for?",
+        optionA: "Internet Protocol",
+        optionB: "Internal Program",
+        optionC: "Internet Program",
+        optionD: "Information Protocol",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which device connects multiple devices within a LAN?",
+        optionA: "Switch",
+        optionB: "Modem",
+        optionC: "Router",
+        optionD: "Gateway",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which layer of the OSI model is responsible for routing?",
+        optionA: "Physical",
+        optionB: "Data Link",
+        optionC: "Network",
+        optionD: "Application",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which protocol translates domain names into IP addresses?",
+        optionA: "DHCP",
+        optionB: "DNS",
+        optionC: "FTP",
+        optionD: "ARP",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which protocol automatically assigns IP addresses to devices?",
+        optionA: "DNS",
+        optionB: "HTTP",
+        optionC: "DHCP",
+        optionD: "SMTP",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "How many layers are there in the OSI model?",
+        optionA: "5",
+        optionB: "6",
+        optionC: "7",
+        optionD: "8",
+        correctAnswer: "C",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// CLOUD COMPUTING QUESTIONS
+// =====================================================
+
+const cloudQuestions = [
+
+    {
+        question: "What is cloud computing?",
+        optionA: "Using only local storage",
+        optionB: "Providing computing services over the internet",
+        optionC: "Writing programs offline",
+        optionD: "Creating computer hardware",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which is an example of cloud storage?",
+        optionA: "Google Drive",
+        optionB: "Keyboard",
+        optionC: "RAM",
+        optionD: "CPU",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What does SaaS stand for?",
+        optionA: "Software as a Service",
+        optionB: "System as a Service",
+        optionC: "Storage as a System",
+        optionD: "Software and Storage",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which cloud service provides virtual machines?",
+        optionA: "IaaS",
+        optionB: "SaaS",
+        optionC: "DaaS",
+        optionD: "BaaS",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which is a major cloud service provider?",
+        optionA: "AWS",
+        optionB: "HTML",
+        optionC: "CSS",
+        optionD: "Java",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What does PaaS stand for?",
+        optionA: "Platform as a Service",
+        optionB: "Program as a System",
+        optionC: "Platform and Storage",
+        optionD: "Processing as Software",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which cloud model is dedicated to a single organization?",
+        optionA: "Public cloud",
+        optionB: "Private cloud",
+        optionC: "Hybrid cloud",
+        optionD: "Community internet",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "A combination of public and private clouds is called:",
+        optionA: "Hybrid cloud",
+        optionB: "Private cloud",
+        optionC: "Local cloud",
+        optionD: "Virtual cloud",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which technology is commonly associated with cloud virtualization?",
+        optionA: "Hypervisor",
+        optionB: "Compiler",
+        optionC: "Browser",
+        optionD: "Text editor",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "One major advantage of cloud computing is:",
+        optionA: "Scalability",
+        optionB: "No internet required",
+        optionC: "No security needed",
+        optionD: "Fixed resources only",
+        correctAnswer: "A",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// ARTIFICIAL INTELLIGENCE QUESTIONS
+// =====================================================
+
+const aiQuestions = [
+
+    {
+        question: "What does AI stand for?",
+        optionA: "Automated Internet",
+        optionB: "Artificial Intelligence",
+        optionC: "Advanced Information",
+        optionD: "Artificial Internet",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which of the following is an application of AI?",
+        optionA: "Speech recognition",
+        optionB: "Keyboard typing",
+        optionC: "File storage",
+        optionD: "Power supply",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which AI technique uses rules to represent knowledge?",
+        optionA: "Expert system",
+        optionB: "Spreadsheet",
+        optionC: "Compiler",
+        optionD: "Database",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is NLP?",
+        optionA: "Natural Language Processing",
+        optionB: "Network Language Program",
+        optionC: "Natural Logic Process",
+        optionD: "Network Learning Protocol",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which search algorithm uses a heuristic?",
+        optionA: "A*",
+        optionB: "Bubble Sort",
+        optionC: "Binary Search",
+        optionD: "Linear Search",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "An AI system that imitates human decision-making in a specific domain is called:",
+        optionA: "Expert system",
+        optionB: "Compiler",
+        optionC: "Database",
+        optionD: "Operating system",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which field allows computers to understand human language?",
+        optionA: "NLP",
+        optionB: "Networking",
+        optionC: "Graphics",
+        optionD: "Operating systems",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which type of AI is designed for a specific task?",
+        optionA: "Narrow AI",
+        optionB: "General AI",
+        optionC: "Super AI",
+        optionD: "Universal AI",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which technique represents knowledge using IF-THEN rules?",
+        optionA: "Rule-based system",
+        optionB: "Sorting",
+        optionC: "Indexing",
+        optionD: "Compilation",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which of these is related to AI?",
+        optionA: "Machine learning",
+        optionB: "HTML tags",
+        optionC: "CSS selectors",
+        optionD: "SQL tables",
+        correctAnswer: "A",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// MACHINE LEARNING QUESTIONS
+// =====================================================
+
+const mlQuestions = [
+
+    {
+        question: "What does ML stand for?",
+        optionA: "Machine Learning",
+        optionB: "Machine Logic",
+        optionC: "Memory Language",
+        optionD: "Model Learning",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which type of learning uses labeled data?",
+        optionA: "Supervised learning",
+        optionB: "Unsupervised learning",
+        optionC: "Reinforcement learning",
+        optionD: "Random learning",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which type of learning works with unlabeled data?",
+        optionA: "Supervised learning",
+        optionB: "Unsupervised learning",
+        optionC: "Reinforcement learning",
+        optionD: "Guided learning",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which algorithm is commonly used for classification?",
+        optionA: "Logistic Regression",
+        optionB: "Linear Search",
+        optionC: "Bubble Sort",
+        optionD: "Dijkstra",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which algorithm is used for clustering?",
+        optionA: "K-Means",
+        optionB: "Linear Regression",
+        optionC: "Naive Bayes",
+        optionD: "Decision Tree",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is overfitting?",
+        optionA: "Model performs very well on training data but poorly on new data",
+        optionB: "Model has no data",
+        optionC: "Model is deleted",
+        optionD: "Model cannot train",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which metric is commonly used for classification accuracy?",
+        optionA: "Accuracy",
+        optionB: "RAM",
+        optionC: "Latency",
+        optionD: "Bandwidth",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which library is commonly used for machine learning in Python?",
+        optionA: "Scikit-learn",
+        optionB: "Bootstrap",
+        optionC: "React",
+        optionD: "jQuery",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is a feature in machine learning?",
+        optionA: "An input variable",
+        optionB: "The final answer only",
+        optionC: "A programming language",
+        optionD: "A database server",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which learning method uses rewards and penalties?",
+        optionA: "Supervised learning",
+        optionB: "Unsupervised learning",
+        optionC: "Reinforcement learning",
+        optionD: "Batch learning",
+        correctAnswer: "C",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// CYBER SECURITY QUESTIONS
+// =====================================================
+
+const cyberQuestions = [
+
+    {
+        question: "What is cyber security?",
+        optionA: "Protection of digital systems and data",
+        optionB: "Website design",
+        optionC: "Database creation only",
+        optionD: "Computer programming only",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is phishing?",
+        optionA: "A social engineering attack",
+        optionB: "A programming language",
+        optionC: "A database",
+        optionD: "A backup method",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which is a strong password characteristic?",
+        optionA: "Only name",
+        optionB: "Only birth date",
+        optionC: "Combination of letters, numbers and symbols",
+        optionD: "Simple word",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "What does malware mean?",
+        optionA: "Malicious software",
+        optionB: "Managed software",
+        optionC: "Manual software",
+        optionD: "Machine learning software",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which malware can replicate itself?",
+        optionA: "Virus",
+        optionB: "Firewall",
+        optionC: "Password",
+        optionD: "Encryption",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is encryption?",
+        optionA: "Converting data into a protected form",
+        optionB: "Deleting data",
+        optionC: "Printing data",
+        optionD: "Copying files",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is the main purpose of a firewall?",
+        optionA: "Filter network traffic",
+        optionB: "Create documents",
+        optionC: "Increase monitor brightness",
+        optionD: "Compile programs",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What does MFA stand for?",
+        optionA: "Multi-Factor Authentication",
+        optionB: "Multiple File Access",
+        optionC: "Main Firewall Application",
+        optionD: "Managed File Authentication",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which attack attempts to make a service unavailable?",
+        optionA: "DoS attack",
+        optionB: "Phishing",
+        optionC: "Password hashing",
+        optionD: "Encryption",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which security property ensures information is accessible to authorized users when needed?",
+        optionA: "Confidentiality",
+        optionB: "Integrity",
+        optionC: "Availability",
+        optionD: "Authentication",
+        correctAnswer: "C",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// SOFTWARE ENGINEERING QUESTIONS
+// =====================================================
+
+const softwareEngineeringQuestions = [
+
+    {
+        question: "What is software engineering?",
+        optionA: "Systematic development and maintenance of software",
+        optionB: "Only programming",
+        optionC: "Computer hardware design",
+        optionD: "Network installation",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What does SDLC stand for?",
+        optionA: "Software Development Life Cycle",
+        optionB: "System Data Life Cycle",
+        optionC: "Software Design Level Code",
+        optionD: "System Development Logic Control",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which is an SDLC model?",
+        optionA: "Waterfall",
+        optionB: "Keyboard",
+        optionC: "Router",
+        optionD: "Compiler",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which model focuses on iterative development?",
+        optionA: "Agile",
+        optionB: "Waterfall only",
+        optionC: "Linear model",
+        optionD: "Hardware model",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is a software requirement?",
+        optionA: "A need or condition that software should satisfy",
+        optionB: "A computer virus",
+        optionC: "A hardware component",
+        optionD: "A programming error only",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is testing used for?",
+        optionA: "Finding defects",
+        optionB: "Creating hardware",
+        optionC: "Increasing RAM",
+        optionD: "Installing an operating system",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which document describes software requirements?",
+        optionA: "SRS",
+        optionB: "CPU",
+        optionC: "RAM",
+        optionD: "HTML",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What does SRS stand for?",
+        optionA: "Software Requirements Specification",
+        optionB: "System Runtime Service",
+        optionC: "Software Resource System",
+        optionD: "System Requirement Software",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which development approach delivers software in small iterations?",
+        optionA: "Agile",
+        optionB: "Waterfall",
+        optionC: "Big Bang",
+        optionD: "Hardware development",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "What is maintenance in software engineering?",
+        optionA: "Modifying software after delivery",
+        optionB: "Buying hardware",
+        optionC: "Writing only documentation",
+        optionD: "Deleting the software",
+        correctAnswer: "A",
+        marks: 1
+    }
+
+];
+
+
+
+// =====================================================
+// ALL EXAMS
+// =====================================================
+
+const exams = [
+
+    {
+        id: "java_exam_01",
+        title: "Java Programming Exam",
+        description: "Basic Java Programming",
+        subject: "Java",
+        questions: javaQuestions
+    },
+
+    {
+        id: "os_exam_01",
+        title: "Operating Systems Exam",
+        description: "Basic Operating Systems",
+        subject: "Operating Systems",
+        questions: osQuestions
+    },
+
+    {
+        id: "computer_networks_exam_01",
+        title: "Computer Networks Exam",
+        description: "Basic Computer Networks",
+        subject: "Computer Networks",
+        questions: networkQuestions
+    },
+
+    {
+        id: "cloud_computing_exam_01",
+        title: "Cloud Computing Exam",
+        description: "Basic Cloud Computing",
+        subject: "Cloud Computing",
+        questions: cloudQuestions
+    },
+
+    {
+        id: "ai_exam_01",
+        title: "Artificial Intelligence Exam",
+        description: "Basic Artificial Intelligence",
+        subject: "Artificial Intelligence",
+        questions: aiQuestions
+    },
+
+    {
+        id: "ml_exam_01",
+        title: "Machine Learning Exam",
+        description: "Basic Machine Learning",
+        subject: "Machine Learning",
+        questions: mlQuestions
+    },
+
+    {
+        id: "cyber_security_exam_01",
+        title: "Cyber Security Exam",
+        description: "Basic Cyber Security",
+        subject: "Cyber Security",
+        questions: cyberQuestions
+    },
+
+    {
+        id: "software_engineering_exam_01",
+        title: "Software Engineering Exam",
+        description: "Basic Software Engineering",
+        subject: "Software Engineering",
+        questions: softwareEngineeringQuestions
+    }
+
+];
+
+
+
+// =====================================================
+// WAIT FOR FIREBASE AUTH
+// =====================================================
+
+function waitForUser() {
+
+    return new Promise((resolve) => {
+
+        const unsubscribe = auth.onAuthStateChanged(function(user) {
+
+            unsubscribe();
+
+            resolve(user);
+
+        });
+
+    });
+
+}
+
+
+
+// =====================================================
+// DELETE OLD QUESTIONS + ADD EXACTLY 10 QUESTIONS
+// =====================================================
+
+async function addExam(exam) {
+
+    const examRef = db
+        .collection("exams")
+        .doc(exam.id);
+
+
+    // ---------------------------------------------
+    // CREATE / UPDATE EXAM
+    // ---------------------------------------------
+
+    await examRef.set({
+
+        title: exam.title,
+
+        description: exam.description,
+
+        duration: 30,
+
+        isActive: true,
+
+        status: "active",
+
+        subject: exam.subject,
+
+        totalMarks: 10,
+
+        totalQuestions: 10
+
+    }, {
+        merge: true
+    });
+
+
+
+    // ---------------------------------------------
+    // GET OLD QUESTIONS
+    // ---------------------------------------------
+
+    const oldQuestionsSnapshot = await examRef
+        .collection("questions")
+        .get();
+
+
+
+    // ---------------------------------------------
+    // CREATE BATCH
+    // ---------------------------------------------
+
+    let batch = db.batch();
+
+    let operationCount = 0;
+
+
+
+    // ---------------------------------------------
+    // DELETE OLD QUESTIONS
+    // ---------------------------------------------
+
+    oldQuestionsSnapshot.forEach(function(doc) {
+
+        batch.delete(doc.ref);
+
+        operationCount++;
+
+    });
+
+
+
+    // ---------------------------------------------
+    // ADD EXACTLY 10 QUESTIONS
+    // ---------------------------------------------
+
+    exam.questions.forEach(function(question, index) {
+
+        const questionId =
+            "question_" +
+            String(index + 1).padStart(2, "0");
+
+
+        const questionRef = examRef
+            .collection("questions")
+            .doc(questionId);
+
+
+        batch.set(questionRef, question);
+
+        operationCount++;
+
+    });
+
+
+
+    // ---------------------------------------------
+    // FIRESTORE BATCH LIMIT CHECK
+    // ---------------------------------------------
+
+    if (operationCount >= 500) {
+
+        throw new Error(
+            "Too many Firestore operations for " +
+            exam.title
+        );
+
+    }
+
+
+
+    // ---------------------------------------------
+    // SAVE EVERYTHING
+    // ---------------------------------------------
+
+    await batch.commit();
+
+}
+
+
+
+// =====================================================
+// UPDATE PROGRESS
+// =====================================================
+
+function updateProgress(current, total, examName) {
+
+    const percentage =
+        Math.round((current / total) * 100);
+
+
+    document.getElementById("progressBar").style.width =
+        percentage + "%";
+
+
+    document.getElementById("progressText").style.display =
+        "block";
+
+
+    document.getElementById("progressText").innerText =
+        "Adding " +
+        current +
+        " of " +
+        total +
+        ": " +
+        examName;
+
+}
+
+
+
+// =====================================================
+// BUTTON CLICK
+// =====================================================
+
+document
+    .getElementById("addExamsBtn")
+    .addEventListener("click", async function() {
+
+
+        const button = this;
+
+        const status =
+            document.getElementById("status");
+
+        const progressContainer =
+            document.getElementById("progressContainer");
+
+
+        // ---------------------------------------------
+        // PREVENT DOUBLE CLICK
+        // ---------------------------------------------
+
+        if (button.disabled) {
+
+            return;
+
+        }
+
+
+        button.disabled = true;
+
+        button.innerText =
+            "Checking Login...";
+
+
+        status.style.display =
+            "block";
+
+
+        status.className =
+            "alert alert-info";
+
+
+        status.innerHTML =
+            "Checking Firebase authentication...";
+
+
+        try {
+
+
+            // -----------------------------------------
+            // CHECK USER LOGIN
+            // -----------------------------------------
+
+            const user =
+                await waitForUser();
+
+
+            if (!user) {
+
+                throw new Error(
+                    "No user is logged in. Please login first and then open this page."
+                );
+
+            }
+
+
+            console.log(
+                "Logged in user:",
+                user.email
+            );
+
+
+            console.log(
+                "UID:",
+                user.uid
+            );
+
+
+
+            // -----------------------------------------
+            // SHOW PROGRESS
+            // -----------------------------------------
+
+            progressContainer.style.display =
+                "block";
+
+
+            button.innerText =
+                "Adding Exams...";
+
+
+            status.className =
+                "alert alert-info";
+
+
+            status.innerHTML =
+                `
+                <strong>Processing...</strong><br>
+                Please wait. Do not refresh this page.
+                `;
+
+
+
+            // -----------------------------------------
+            // ADD EXAMS ONE BY ONE
+            // -----------------------------------------
+
+            const totalExams =
+                exams.length;
+
+
+            let completed =
+                0;
+
+
+            for (const exam of exams) {
+
+
+                updateProgress(
+                    completed + 1,
+                    totalExams,
+                    exam.title
+                );
+
+
+                status.innerHTML =
+                    `
+                    <strong>Adding:</strong>
+                    ${exam.title}<br>
+                    <small>
+                    Please wait...
+                    </small>
+                    `;
+
+
+                console.log(
+                    "Adding exam:",
+                    exam.title
+                );
+
+
+                await addExam(exam);
+
+
+                completed++;
+
+
+                console.log(
+                    "Successfully added:",
+                    exam.title
+                );
+
+            }
+
+
+
+            // -----------------------------------------
+            // 100% COMPLETE
+            // -----------------------------------------
+
+            document.getElementById("progressBar")
+                .style.width = "100%";
+
+
+            document.getElementById("progressText")
+                .innerText =
+                "All 8 exams completed successfully!";
+
+
+            // -----------------------------------------
+            // SUCCESS MESSAGE
+            // -----------------------------------------
+
+            status.className =
+                "alert alert-success";
+
+
+            status.innerHTML = `
+
+                <strong>
+                    Success! 🎉
+                </strong>
+
+                <br><br>
+
+                <ul class="success-list">
+
+                    <li>
+                        ✅ Java Programming – 10 Questions
+                    </li>
+
+                    <li>
+                        ✅ Operating Systems – 10 Questions
+                    </li>
+
+                    <li>
+                        ✅ Computer Networks – 10 Questions
+                    </li>
+
+                    <li>
+                        ✅ Cloud Computing – 10 Questions
+                    </li>
+
+                    <li>
+                        ✅ Artificial Intelligence – 10 Questions
+                    </li>
+
+                    <li>
+                        ✅ Machine Learning – 10 Questions
+                    </li>
+
+                    <li>
+                        ✅ Cyber Security – 10 Questions
+                    </li>
+
+                    <li>
+                        ✅ Software Engineering – 10 Questions
+                    </li>
+
+                </ul>
+
+                <hr>
+
+                <strong>
+                    Total: 8 Exams + 80 Questions
+                </strong>
+
+                <br>
+
+                All questions have been added successfully.
+
+            `;
+
+
+            button.innerText =
+                "✓ Part 1 Added Successfully";
+
+
+            button.classList.remove(
+                "btn-primary"
+            );
+
+
+            button.classList.add(
+                "btn-success"
+            );
+
+
+        }
+
+
+        catch (error) {
+
+
+            console.error(
+                "PART 1 ERROR:",
+                error
+            );
+
+
+            status.className =
+                "alert alert-danger";
+
+
+            status.innerHTML = `
+
+                <strong>
+                    ❌ Error!
+                </strong>
+
+                <br><br>
+
+                ${error.message}
+
+                <br><br>
+
+                <small>
+                    Check the browser console
+                    (F12 → Console) for details.
+                </small>
+
+            `;
+
+
+            button.disabled =
+                false;
+
+
+            button.innerText =
+                "Try Again";
+
+
+            document.getElementById(
+                "progressText"
+            ).innerText =
+                "Process stopped because of an error.";
+
+        }
+
+    });
+
+
+</script>
+
+
+</body>
+</html>

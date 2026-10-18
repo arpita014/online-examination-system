@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add C, C++ & DSA Exams</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 550px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        #status {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="card-header bg-success text-white text-center">
+        <h4 class="mb-0">Online Examination System</h4>
+        <small>Add C, C++ & DSA Exams</small>
+    </div>
+
+    <div class="card-body">
+
+        <h5 class="text-center mb-3">
+            New Exams
+        </h5>
+
+        <div class="mb-3">
+            <div>🔵 C Programming — 10 Questions</div>
+            <div>🟣 C++ Programming — 10 Questions</div>
+            <div>🟠 Data Structures & Algorithms — 10 Questions</div>
+        </div>
+
+        <button
+            id="addExamsBtn"
+            class="btn btn-success btn-lg w-100">
+            Add C, C++ & DSA Exams
+        </button>
+
+        <div id="status" class="alert"></div>
+
+    </div>
+</div>
+
+
+<!-- ==========================================
+     FIREBASE
+========================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+
+<script>
+
+// ==========================================
+// FIREBASE CONFIG
+// ==========================================
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyDe5o4C6FFWc_O8LcUao61xHHnlruKtIZc",
+
+    authDomain:
+        "online-examination-syste-21adf.firebaseapp.com",
+
+    projectId:
+        "online-examination-syste-21adf",
+
+    storageBucket:
+        "online-examination-syste-21adf.firebasestorage.app",
+
+    messagingSenderId:
+        "271890466949",
+
+    appId:
+        "1:271890466949:web:13ff78e6523d28ad7ac1ec",
+
+    measurementId:
+        "G-BSMQ1MB3J0"
+};
+
+
+// Initialize Firebase
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const db = firebase.firestore();
+
+
+// ==========================================
+// C QUESTIONS
+// ==========================================
+
+const cQuestions = [
+
+    {
+        question: "Which language is C?",
+        optionA: "High-level programming language",
+        optionB: "Markup language",
+        optionC: "Query language",
+        optionD: "Styling language",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which function is the starting point of a C program?",
+        optionA: "start()",
+        optionB: "main()",
+        optionC: "begin()",
+        optionD: "run()",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which symbol is used to end a statement in C?",
+        optionA: ":",
+        optionB: ".",
+        optionC: ";",
+        optionD: ",",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which header file is commonly used for printf() and scanf()?",
+        optionA: "string.h",
+        optionB: "math.h",
+        optionC: "stdio.h",
+        optionD: "stdlib.h",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which data type is used to store a single character?",
+        optionA: "int",
+        optionB: "char",
+        optionC: "float",
+        optionD: "double",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which operator is used to get the address of a variable?",
+        optionA: "*",
+        optionB: "&",
+        optionC: "%",
+        optionD: "#",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which loop executes its body at least once?",
+        optionA: "for",
+        optionB: "while",
+        optionC: "do-while",
+        optionD: "nested loop",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to define a constant variable?",
+        optionA: "constant",
+        optionB: "const",
+        optionC: "static",
+        optionD: "fixed",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which function is used to allocate memory dynamically?",
+        optionA: "malloc()",
+        optionB: "memory()",
+        optionC: "alloc()",
+        optionD: "new()",
+        correctAnswer: "A",
+        marks: 1
+    },
+
+    {
+        question: "Which symbol is used to access the value pointed to by a pointer?",
+        optionA: "&",
+        optionB: "*",
+        optionC: "#",
+        optionD: "@",
+        correctAnswer: "B",
+        marks: 1
+    }
+
+];
+
+
+// ==========================================
+// C++ QUESTIONS
+// ==========================================
+
+const cppQuestions = [
+
+    {
+        question: "What does C++ support?",
+        optionA: "Only procedural programming",
+        optionB: "Object-oriented programming",
+        optionC: "Only markup programming",
+        optionD: "Only database programming",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which symbol is used for single-line comments in C++?",
+        optionA: "#",
+        optionB: "//",
+        optionC: "/*",
+        optionD: "<!--",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which keyword is used to create a class in C++?",
+        optionA: "object",
+        optionB: "class",
+        optionC: "structural",
+        optionD: "define",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which concept allows a class to acquire properties of another class?",
+        optionA: "Encapsulation",
+        optionB: "Inheritance",
+        optionC: "Abstraction",
+        optionD: "Compilation",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which concept means using the same function name with different parameters?",
+        optionA: "Inheritance",
+        optionB: "Encapsulation",
+        optionC: "Function overloading",
+        optionD: "Abstraction",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which access specifier makes members accessible from outside the class?",
+        optionA: "private",
+        optionB: "protected",
+        optionC: "public",
+        optionD: "internal",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which operator is used for dynamic memory allocation in C++?",
+        optionA: "malloc",
+        optionB: "new",
+        optionC: "alloc",
+        optionD: "create",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which operator is used to release dynamically allocated memory?",
+        optionA: "remove",
+        optionB: "free",
+        optionC: "delete",
+        optionD: "clear",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which feature hides internal implementation details?",
+        optionA: "Inheritance",
+        optionB: "Abstraction",
+        optionC: "Overloading",
+        optionD: "Compilation",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which function is automatically called when an object is created?",
+        optionA: "Destructor",
+        optionB: "Constructor",
+        optionC: "Main function",
+        optionD: "Friend function",
+        correctAnswer: "B",
+        marks: 1
+    }
+
+];
+
+
+// ==========================================
+// DSA QUESTIONS
+// ==========================================
+
+const dsaQuestions = [
+
+    {
+        question: "What does DSA stand for?",
+        optionA: "Data System Application",
+        optionB: "Data Structures and Algorithms",
+        optionC: "Database System Algorithm",
+        optionD: "Digital Structure Application",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which data structure follows LIFO?",
+        optionA: "Queue",
+        optionB: "Stack",
+        optionC: "Array",
+        optionD: "Linked List",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which data structure follows FIFO?",
+        optionA: "Stack",
+        optionB: "Queue",
+        optionC: "Tree",
+        optionD: "Graph",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which data structure consists of nodes connected by links?",
+        optionA: "Array",
+        optionB: "Linked List",
+        optionC: "Stack",
+        optionD: "Queue",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which data structure is commonly used for recursion?",
+        optionA: "Queue",
+        optionB: "Stack",
+        optionC: "Graph",
+        optionD: "Array",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which algorithm is used to find an element in a sorted array efficiently?",
+        optionA: "Linear Search",
+        optionB: "Binary Search",
+        optionC: "Bubble Sort",
+        optionD: "Selection Sort",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which sorting algorithm repeatedly compares adjacent elements?",
+        optionA: "Merge Sort",
+        optionB: "Quick Sort",
+        optionC: "Bubble Sort",
+        optionD: "Heap Sort",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "What is the average time complexity of binary search?",
+        optionA: "O(n)",
+        optionB: "O(log n)",
+        optionC: "O(n²)",
+        optionD: "O(1)",
+        correctAnswer: "B",
+        marks: 1
+    },
+
+    {
+        question: "Which data structure is used to represent hierarchical data?",
+        optionA: "Stack",
+        optionB: "Queue",
+        optionC: "Tree",
+        optionD: "Array",
+        correctAnswer: "C",
+        marks: 1
+    },
+
+    {
+        question: "Which data structure is used to represent connections between nodes?",
+        optionA: "Array",
+        optionB: "Graph",
+        optionC: "Stack",
+        optionD: "Queue",
+        correctAnswer: "B",
+        marks: 1
+    }
+
+];
+
+
+// ==========================================
+// ADD EXAM FUNCTION
+// ==========================================
+
+async function addExam(examId, examData, questions) {
+
+    // Create exam document
+
+    await db.collection("exams")
+        .doc(examId)
+        .set(examData);
+
+
+    // Create batch
+
+    const batch = db.batch();
+
+
+    // Add questions
+
+    questions.forEach((q) => {
+
+        const questionRef = db
+            .collection("exams")
+            .doc(examId)
+            .collection("questions")
+            .doc();
+
+        batch.set(questionRef, q);
+
+    });
+
+
+    // Save all questions
+
+    await batch.commit();
+}
+
+
+// ==========================================
+// BUTTON CLICK
+// ==========================================
+
+document
+    .getElementById("addExamsBtn")
+    .addEventListener("click", async function () {
+
+        const button = this;
+
+        const status =
+            document.getElementById("status");
+
+
+        button.disabled = true;
+
+        button.innerText = "Adding Exams...";
+
+
+        status.style.display = "block";
+
+        status.className = "alert alert-info";
+
+        status.innerText =
+            "Please wait... Adding C, C++ and DSA exams.";
+
+
+        try {
+
+            // ==========================================
+            // C EXAM
+            // ==========================================
+
+            await addExam(
+
+                "c_exam_01",
+
+                {
+                    title: "C Programming Exam",
+
+                    description:
+                        "Basic C Programming",
+
+                    duration: 30,
+
+                    isActive: true,
+
+                    status: "active",
+
+                    subject: "C",
+
+                    totalMarks: 10,
+
+                    totalQuestions: 10
+                },
+
+                cQuestions
+            );
+
+
+            // ==========================================
+            // C++ EXAM
+            // ==========================================
+
+            await addExam(
+
+                "cpp_exam_01",
+
+                {
+                    title: "C++ Programming Exam",
+
+                    description:
+                        "Object Oriented C++ Programming",
+
+                    duration: 30,
+
+                    isActive: true,
+
+                    status: "active",
+
+                    subject: "C++",
+
+                    totalMarks: 10,
+
+                    totalQuestions: 10
+                },
+
+                cppQuestions
+            );
+
+
+            // ==========================================
+            // DSA EXAM
+            // ==========================================
+
+            await addExam(
+
+                "dsa_exam_01",
+
+                {
+                    title:
+                        "Data Structures & Algorithms Exam",
+
+                    description:
+                        "Basic Data Structures and Algorithms",
+
+                    duration: 30,
+
+                    isActive: true,
+
+                    status: "active",
+
+                    subject: "DSA",
+
+                    totalMarks: 10,
+
+                    totalQuestions: 10
+                },
+
+                dsaQuestions
+            );
+
+
+            // ==========================================
+            // SUCCESS
+            // ==========================================
+
+            status.className =
+                "alert alert-success";
+
+            status.innerHTML = `
+
+                <strong>Success! 🎉</strong><br><br>
+
+                ✅ C Programming Exam — 10 Questions<br>
+
+                ✅ C++ Programming Exam — 10 Questions<br>
+
+                ✅ DSA Exam — 10 Questions
+
+            `;
+
+
+            button.innerText =
+                "3 Exams Added Successfully";
+
+
+        } catch (error) {
+
+            console.error("ERROR:", error);
+
+
+            status.className =
+                "alert alert-danger";
+
+
+            status.innerHTML = `
+
+                <strong>Error!</strong><br>
+
+                ${error.message}
+
+            `;
+
+
+            button.disabled = false;
+
+            button.innerText =
+                "Try Again";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
