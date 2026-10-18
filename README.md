@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cloud-Based Online Examination System
 
 A complete serverless online examination platform built with HTML5, CSS3, Bootstrap 5, Vanilla JavaScript, and Firebase (Authentication, Cloud Firestore, Hosting).
@@ -191,3 +192,7 @@ After cloning, you must:
 ## License
 
 Academic project — free for educational use.
+=======
+# online-examination-system
+Cloud-Based Online Examination System built with HTML, CSS, JavaScript, Bootstrap, and Firebase for student authentication and online exam management.
+>>>>>>> df1a1cb23822e3b0fb686bd1832656d08cd73c5e
